@@ -21,12 +21,12 @@ function App() {
     fetchProducts()
   }, [])
 
-  console.log(products);
+  // console.log(products);
 
   return (
     <div className="">
       <Navbar />
-      <Products />
+      <Products products={products} />
     </div>
   );
 }
