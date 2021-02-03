@@ -46,6 +46,8 @@ const Cart = ({ cart, handleUpdateCartQty, handleRemoveFromCart, handleResetCart
                             size="large"
                             variant="contained"
                             color="primary"
+                            component={Link}
+                            to="/checkout"
                         >
                             Checkout
                         </Button>
