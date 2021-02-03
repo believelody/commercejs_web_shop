@@ -4,7 +4,7 @@ import useStyle from './cartStyle'
 import CartItem from './CartItem'
 import { Link } from 'react-router-dom'
 
-const Cart = ({ cart }) => {
+const Cart = ({ cart, handleUpdateCartQty, handleRemoveFromCart, handleResetCart }) => {
     const classes = useStyle()
 
     const EmptyCart = () => (
@@ -19,7 +19,11 @@ const Cart = ({ cart }) => {
                 <Grid container spacing={3}>
                     {cart.line_items.map(item => (
                         <Grid item key={item.id} xs={12} sm={4}>
-                            <CartItem item={item} />
+                            <CartItem
+                                item={item}
+                                onUpdateQty={handleUpdateCartQty}
+                                onRemoveFromCart={handleRemoveFromCart}
+                            />
                         </Grid>
                     ))}
                 </Grid>
@@ -28,8 +32,23 @@ const Cart = ({ cart }) => {
                         Subtotal: {cart.subtotal.formatted_with_symbol}
                     </Typography>
                     <div>
-                        <Button className={classes.emptyButton} size="large" variant="contained" color="secondary">Empty Cart</Button>
-                        <Button className={classes.checkoutButton} size="large" variant="contained" color="primary">Checkout</Button>
+                        <Button
+                            className={classes.emptyButton}
+                            size="large"
+                            variant="contained"
+                            color="secondary"
+                            onClick={handleResetCart}
+                        >
+                            Empty Cart
+                        </Button>
+                        <Button
+                            className={classes.checkoutButton}
+                            size="large"
+                            variant="contained"
+                            color="primary"
+                        >
+                            Checkout
+                        </Button>
                     </div>
                 </div>
             </>
