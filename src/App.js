@@ -35,7 +35,34 @@ function App() {
       const { cart } = await commerce.cart.add(productId, quantity);
       setCart(cart)
     } catch (error) {
-      console.log(error);
+      console.log(error)
+    }
+  }
+
+  const handleUpdateCartQty = async (productId, quantity) => {
+    try {
+      const response = await commerce.cart.update(productId, { quantity })
+      setCart(response.cart)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleRemoveFromCart = async (productId) => {
+    try {
+      const { cart } = await commerce.cart.remove(productId)
+      setCart(cart)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleResetCart = async () => {
+    try {
+      const { cart } = await commerce.cart.empty()
+      setCart(cart)
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -43,8 +70,6 @@ function App() {
     fetchProducts()
     fetchCart()
   }, [])
-
-  console.log(cart);
 
   return (
     <BrowserRouter>
@@ -55,7 +80,12 @@ function App() {
             <Products products={products} onAddToCart={handleAddToCart} />
           </Route>
           <Route exact path="/cart">
-            <Cart cart={cart} />
+            <Cart
+              cart={cart}
+              handleUpdateCartQty={handleUpdateCartQty}
+              handleRemoveFromCart={handleRemoveFromCart}
+              handleResetCart={handleResetCart}
+            />
           </Route>
         </Switch>
       </div>
