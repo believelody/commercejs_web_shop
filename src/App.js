@@ -13,8 +13,7 @@ function App() {
 
   const fetchProducts = async () => {
     try {
-      const { data } = await commerce.products.list();
-
+      const { data } = await commerce.products.list()
       setProducts(data)
     } catch (error) {
       console.log(error)
@@ -23,11 +22,11 @@ function App() {
 
   const fetchCart = async () => {
     try {
-      const res = await commerce.cart.retrieve();
+      const res = await commerce.cart.retrieve()
 
       setCart(res)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   }
 
@@ -89,7 +88,7 @@ function App() {
             />
           </Route>
           <Route exact path="/checkout">
-            <Checkout />
+            <Checkout cart={cart} />
           </Route>
         </Switch>
       </div>
