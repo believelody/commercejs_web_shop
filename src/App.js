@@ -9,7 +9,9 @@ import { commerce } from './lib/commerce'
 
 function App() {
   const [products, setProducts] = useState([])
-  const [cart, setCart] = useState({})
+  const [cart, setCart] = useState(null)
+  const [order, setOrder] = useState(null)
+  const [errorMessage, setErrorMessage] = useState("")
 
   const fetchProducts = async () => {
     try {
@@ -23,8 +25,8 @@ function App() {
   const fetchCart = async () => {
     try {
       const res = await commerce.cart.retrieve()
-
       setCart(res)
+      setOrder(null)
     } catch (error) {
       console.log(error)
     }
@@ -66,6 +68,27 @@ function App() {
     }
   }
 
+  const resetCart = async () => {
+    try {
+      const newCart = await commerce.cart.refresh()
+      setCart(newCart)
+      setOrder(null)
+    } catch (err) {
+      console.log(err.data.error.message)
+      setErrorMessage(err.data.error.message)
+    }
+  }
+
+  const handleCaptureCheckout = async (checkoutTokenId, newOrder) => {
+    try {
+      const incomingOrder = await commerce.checkout.capture(checkoutTokenId, newOrder)
+      setOrder(incomingOrder)
+      resetCart()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     fetchProducts()
     fetchCart()
@@ -74,7 +97,7 @@ function App() {
   return (
     <BrowserRouter>
       <div className="">
-        <Navbar totalItems={cart.total_unique_items} />
+        <Navbar totalItems={cart?.total_unique_items} />
         <Switch>
           <Route exact path="/">
             <Products products={products} onAddToCart={handleAddToCart} />
@@ -88,7 +111,7 @@ function App() {
             />
           </Route>
           <Route exact path="/checkout">
-            <Checkout cart={cart} />
+            <Checkout cart={cart} order={order} onCaptureCheckout={handleCaptureCheckout} error={errorMessage} />
           </Route>
         </Switch>
       </div>
